@@ -1,0 +1,12 @@
+---
+- name: stop RAM-hungry services on low-mem machines
+  hosts: all
+  remote_user: root
+
+  tasks:
+    - name: stop RAM-hungry services on low-mem machines
+      service: name="{{ item }}" state=stopped
+      with_items:
+        - postgrey
+        - postfix
+      when: ansible_memtotal_mb | int < 196
