@@ -19,6 +19,7 @@ chown root:root $KEY_FILE $(dirname $KEY_FILE)
 chmod 600 $KEY_FILE
 chmod 700 $(dirname $KEY_FILE)
 echo "ssh key set up successfully in" $KEY_FILE
+echo
 
 # ansible needs python to run
 apt update
