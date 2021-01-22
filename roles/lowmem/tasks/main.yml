@@ -1,8 +1,21 @@
 ---
+# gather service facts only at the beginning, when stopping services and only for small VPS
+- name: Populate service facts
+  service_facts:
+  when:
+  - ansible_memtotal_mb | int < 196
+  - ansible_facts["services"] is not defined
+
 - name: start/stop RAM-hungry services on low-mem machines
   become: true
   service: name="{{ item }}" state="{{ state | default("stopped") }}"
+  when:
+    - ansible_memtotal_mb | int < 196
+    - item in services
   with_items:
     - postgrey
     - postfix
-  when: ansible_memtotal_mb | int < 196
+    - grabrabbel # does not exist
+  changed_when:
+    - state == "started"
+    - ansible_facts["services"][item]["state"] != "running"
