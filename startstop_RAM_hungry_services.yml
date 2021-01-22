@@ -1,6 +1,6 @@
 ---
-- name: stop RAM-hungry services on low-mem machines
-  hosts: all
+- name: stop RAM-hungry services on low-mem VPS
+  hosts: vps
   remote_user: root
 
   tasks:
