@@ -5,7 +5,7 @@
 
   tasks:
     - name: stop RAM-hungry services on low-mem machines
-      service: name="{{ item }}" state=stopped
+      service: name="{{ item }}" state="{{ state | default("stopped") }}"
       with_items:
         - postgrey
         - postfix
