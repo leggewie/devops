@@ -1,0 +1,8 @@
+---
+- name: start/stop RAM-hungry services on low-mem machines
+  become: true
+  service: name="{{ item }}" state="{{ state | default("stopped") }}"
+  with_items:
+    - postgrey
+    - postfix
+  when: ansible_memtotal_mb | int < 196
