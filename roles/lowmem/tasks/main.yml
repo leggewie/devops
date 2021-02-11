@@ -6,7 +6,7 @@
   - ansible_memtotal_mb | int < 196
   - ansible_facts["services"] is not defined # true only on first run
 
-- name: start/stop RAM-hungry services on low-mem machines
+- name: "{{ state|regex_replace('ed$', 'ing') }} RAM-hungry services on lowmem machines"
   become: true
   service: name="{{ item }}" state="{{ state | default("stopped") }}"
   when:
