@@ -1,0 +1,9 @@
+### https://stackoverflow.com/a/30176625/10468807 ###
+
+# Install some roles from the Ansible Galaxy
+- name: bootstrap
+  src: mariancraciun1983.install_python
+- name: nginx
+  src: nginxinc.nginx
+- name: wireguard
+  src: githubixx.ansible_role_wireguard
