@@ -1,0 +1,34 @@
+#!/bin/bash
+# bootstrap a Debian/Ubuntu node just far enough to be able to
+# manage it via ansible going forward
+#
+# 1) install my SSH key
+# 2) install sudo and python
+
+set -e # exit on all errors
+
+SSH_KEY='ssh-dss AAAAB3NzaC1kc3MAAACBAKitW3KR9TG/tgvsYQ+OFJWRjngTGq4TGcSFmX6/wiIiQPARxPnjytXFjRKgIZkb81K/YGNHrHk4W9FVdvY7hYOaP0sdT/KyiLuyh+Q667mcjLGHfkIRHb1dBZSY1gFNCJums4809qBLEbQismHAJb8bSZ7Gu8pDKk5sF8H4bjpdAAAAFQCDfsCC5nfXeijFcg+rLsdf0KvuiQAAAIEApJ0X1t7Xm2bXy99lF1RSY617F2wg2zHJUHos6DlKZ69O3Z+ORtY4xbETYARgTLId/x/4XqoMXISD72NI5f/atxVXB3iZjPvUsIqTMfTDqpMKsAVQGR3nJfAgMj10AKbI87FeX2MuEvKaBZlhW6wMDY3NSUprTlkLuknfZQHwdSIAAACAdrp5My2UntwL5djIdV2ZB1qAKm/Vd9caE3nfvhpPOGydqaiGZG6lJWmB2m/Ezy6TiiyqMhJOUa20X0TpR/Jk7IXlu7jZKFPIbFaM65hXn4+n6sLoPs2ZgweLZ+Ab1++cDKihw2nU0AaUDI4QKfEes/3yaLgUuPb3SYEJD1BAXPo= leggewie@Rolf'
+SSH_KEY='ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFp4mGpUoB6N88nWHusqCFoan6a7vCa6PjnQ9/Uv5YGl foss@leggewie.org'
+KEY_FILE=~/.ssh/authorized_keys
+
+# set up my ssh key for the current user
+mkdir -p $(dirname $KEY_FILE)
+touch $KEY_FILE
+
+# add key only if it isn't present yet
+grep -q -F "$SSH_KEY" $KEY_FILE 2>/dev/null || echo "$SSH_KEY" >> $KEY_FILE
+
+# ensure proper file permissions on the keyfile
+chown $USER:$USER $KEY_FILE $(dirname $KEY_FILE)
+chmod 600 $KEY_FILE
+chmod 700 $(dirname $KEY_FILE)
+echo "ssh key set up successfully in" $KEY_FILE
+echo
+
+# ansible needs python and sudo to run
+if [ $UID -eq 0 ]; then
+  echo "making sure python3 and sudo are installed"
+  echo
+  apt update
+  apt install python3 sudo
+fi
