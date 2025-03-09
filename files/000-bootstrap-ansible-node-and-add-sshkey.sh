@@ -30,5 +30,5 @@ if [ $UID -eq 0 ]; then
   echo "making sure python3 and sudo are installed"
   echo
   apt update
-  apt install python3 sudo
+  apt-get -y install python3 sudo
 fi
