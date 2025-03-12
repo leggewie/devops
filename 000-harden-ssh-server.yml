@@ -1,0 +1,24 @@
+---
+- hosts: all
+  become: yes
+  tasks:
+    - name: Harden SSH configuration
+      lineinfile:
+        path: "/etc/ssh/sshd_config"
+        regexp: "^(#)?{{ item.key }}"
+        line: "{{ item.key }} {{ item.value }}"
+        backup: yes
+        state: present
+      loop:
+        - { key: "PermitRootLogin", value: "no" }
+        - { key: "PasswordAuthentication", value: "no" }
+        - { key: "PermitEmptyPasswords", value: "no" }
+      loop_control:
+        label: "{{ item.key }}"
+      notify: Restart SSH
+
+  handlers:
+    - name: Restart SSH
+      service:
+        name: sshd
+        state: restarted
