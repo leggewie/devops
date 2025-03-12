@@ -59,6 +59,7 @@ if [ $UID -eq 0 ]; then
   fi
   if grep -qE "^[@#]includedir /etc/sudoers.d/?$" /etc/sudoers; then
     echo "ansible ALL=(ALL) NOPASSWD:ALL" | sudo tee /etc/sudoers.d/ansible > /dev/null
+    chmod 440 /etc/sudoers.d/ansible
     visudo --check --quiet --strict || visudo --check --strict
   else
     echo "ERROR: it appears you are not including /etc/sudoers.d. Aborting here."
