@@ -2,6 +2,12 @@
 - hosts: all
   become: yes
   tasks:
+    - name: Set empty password for ansible user (https://unix.stackexchange.com/a/193131/311426)
+      user:
+        name: ansible
+        password: "*"
+        password_lock: false
+
     - name: Harden SSH configuration
       lineinfile:
         path: "/etc/ssh/sshd_config"

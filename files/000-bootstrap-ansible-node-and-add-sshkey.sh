@@ -54,6 +54,7 @@ if [ $UID -eq 0 ]; then
   if ! id -u "ansible" &> /dev/null; then
     echo "Creating user ansible"
     useradd -m -s /bin/bash ansible
+    usermod -p '*' ansible # https://unix.stackexchange.com/a/193131/311426
   else
     echo "user ansible already present, only adding to sudoers"
   fi
