@@ -39,9 +39,6 @@ add_ssh_key () {
 }
 
 if [ $UID -eq 0 ]; then
-  # add SSH key for root user
-  add_ssh_key root
-
   # ansible needs python and sudo to run
   echo "making sure python3 and sudo are installed, this may take a while"
   apt update &> /dev/null
@@ -49,6 +46,9 @@ if [ $UID -eq 0 ]; then
     echo "sudo and python were successfully installed" || \
     echo "ERROR: Something went wrong when installing sudo and python"
   echo
+
+  # add SSH key for root user
+  add_ssh_key root
 
   # add USER ansible and prepare for passwordless sudo access
   if ! id -u "ansible" &> /dev/null; then
