@@ -9,6 +9,7 @@
 # 3) set up a passwordless ansible user
 
 set -e # exit on all errors
+trap 'echo "ERROR: Script failed with exit code $?"' ERR # indicate clearly when the script fails
 
 # set up my ssh key for ssh login
 add_ssh_key () {
